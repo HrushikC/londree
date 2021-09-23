@@ -4,8 +4,6 @@ __pycache__/
 
 *.py[cod]
 
-components/site.db/
-
 instance/
 
 .pytest_cache/
