@@ -1,7 +1,7 @@
 from flask import render_template, url_for, flash, redirect, request
 from components import app, db, bcrypt
 from components.forms import RegistrationForm, LoginForm
-from components.models import User, Post
+from components.models import User
 from flask_login import login_user, current_user, logout_user, login_required
 
 
@@ -9,6 +9,11 @@ from flask_login import login_user, current_user, logout_user, login_required
 @app.route("/home")
 def home():
     return render_template('home.html')
+
+
+@app.route("/laundry")
+def laundry():
+    return render_template('laundry.html')
 
 
 @app.route("/register", methods=['GET', 'POST'])
@@ -45,4 +50,5 @@ def login():
 @app.route("/logout")
 def logout():
     logout_user()
+    flash('You have successfully logged out!', 'success')
     return redirect(url_for('home'))
