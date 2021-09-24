@@ -14,10 +14,40 @@ class User(db.Model, UserMixin):
     email = db.Column(db.String(120), unique=True, nullable=False)
     image_file = db.Column(db.String(20), nullable=False, default='default.jpg')
     password = db.Column(db.String(60), nullable=False)
+    loads = db.relationship('Load', backref='owner', lazy=True)
 
     def __repr__(self):
         return f"User('{self.username}', '{self.email}', '{self.image_file}')"
 
 
-# class Laundromat(db.Model):
-#
+class Laundromat(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    location = db.Column(db.String(60), nullable=False, default='The Ohio State University (Main)')
+    sub_location = db.Column(db.String(30), unique=True, nullable=False, default='Taylor Tower')
+    droshers = db.relationship('Drosher', backref='laundromat', lazy=True)
+
+    def __repr__(self):
+        return f"Laundromat('{self.sub_location}')"
+
+
+class Drosher(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    is_washer = db.Column(db.Boolean, default=True, nullable=False)
+    available = db.Column(db.Boolean, default=True, nullable=False)
+    laundromat_id = db.Column(db.Integer, db.ForeignKey('laundromat.id'), nullable=False)
+    load = db.relationship('Load', backref='drosher', lazy=True)
+
+    def __repr__(self):
+        return f"Drosher('{self.type}', '{self.available}')"
+
+
+class Load(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    created_time = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+    duration = db.Column(db.Integer, nullable=False)  # minutes
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    drosher_id = db.Column(db.Integer, db.ForeignKey('drosher.id'), nullable=False)
+
+    def __repr__(self):
+        return f"Load(Owner: '{self.user_id}', Drosher: '{self.drosher_id}', " \
+               f"Started: '{self.created_time}', Duration(mins): '{self.duration}')"
