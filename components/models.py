@@ -22,8 +22,8 @@ class User(db.Model, UserMixin):
 
 class Laundromat(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    location = db.Column(db.String(60), nullable=False, default='The Ohio State University (Main)')
-    sub_location = db.Column(db.String(30), unique=True, nullable=False, default='Taylor Tower')
+    location = db.Column(db.String(60), nullable=False)
+    sub_location = db.Column(db.String(30), unique=True, nullable=False)
     droshers = db.relationship('Drosher', backref='laundromat', lazy=True)
 
     def __repr__(self):

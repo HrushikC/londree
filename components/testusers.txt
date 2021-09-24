@@ -1,3 +1,0 @@
-superuser; superuser@gmail.com; password
-testuser1; testuser1@gmail.com; password
-testuser2; testuser2@gmail.com; password

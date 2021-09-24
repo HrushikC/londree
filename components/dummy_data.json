@@ -1,0 +1,75 @@
+{
+    "Users": [
+        {
+            "username": "superuser",
+            "email": "superuser@gmail.com",
+            "password": "password"
+        },
+        {
+            "username": "testuser1",
+            "email": "testuser1@gmail.com",
+            "password": "password"
+        },
+        {
+            "username": "testuser2",
+            "email": "testuser2@gmail.com",
+            "password": "password"
+        }
+    ],
+    "Laundromat": [
+        {
+            "location": "The Ohio State University (Main)",
+            "sub_location": "Taylor Tower"
+        }
+    ],
+    "Drosher": [
+        {
+            "is_washer": true,
+            "laundromat_id": 1
+        },
+        {
+            "is_washer": true,
+            "laundromat_id": 1
+        },
+        {
+            "is_washer": true,
+            "laundromat_id": 1
+        },
+        {
+            "is_washer": true,
+            "laundromat_id": 1
+        },
+        {
+            "is_washer": true,
+            "laundromat_id": 1
+        },
+        {
+            "is_washer": true,
+            "laundromat_id": 1
+        },
+        {
+            "is_washer": false,
+            "laundromat_id": 1
+        },
+        {
+            "is_washer": false,
+            "laundromat_id": 1
+        },
+        {
+            "is_washer": false,
+            "laundromat_id": 1
+        },
+        {
+            "is_washer": false,
+            "laundromat_id": 1
+        },
+        {
+            "is_washer": false,
+            "laundromat_id": 1
+        },
+        {
+            "is_washer": false,
+            "laundromat_id": 1
+        },
+    ]
+}
