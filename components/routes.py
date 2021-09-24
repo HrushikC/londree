@@ -52,3 +52,9 @@ def logout():
     logout_user()
     flash('You have successfully logged out!', 'success')
     return redirect(url_for('home'))
+
+
+@app.route("/wash-history")
+@login_required
+def wash_history():
+    return render_template('wash_history.html', title='History')
