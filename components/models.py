@@ -23,7 +23,7 @@ class Laundromat(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     location = db.Column(db.String(60), nullable=False)
     sub_location = db.Column(db.String(30), unique=True, nullable=False)
-    droshers = db.relationship('Drosher', backref='laundromat', lazy=True)
+    droshers = db.relationship('Drosher', backref='laundromat', lazy="dynamic")
 
     def __repr__(self):
         return f"Laundromat('{self.sub_location}')"
@@ -37,7 +37,7 @@ class Drosher(db.Model):
     load = db.relationship('Load', backref='drosher', lazy=True)
 
     def __repr__(self):
-        return f"Drosher('{self.type}', '{self.available}')"
+        return f"Drosher('{self.is_washer}', '{self.available}')"
 
 
 class Load(db.Model):

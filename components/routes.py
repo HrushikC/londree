@@ -1,6 +1,6 @@
 from flask import render_template, url_for, flash, redirect, request
 from components import app, db, bcrypt
-from components.forms import RegistrationForm, LoginForm, UpdateAccountForm, CreateLoadForm
+from components.forms import RegistrationForm, LoginForm, UpdateAccountForm
 from components.models import User, Laundromat, Drosher
 from flask_login import login_user, current_user, logout_user, login_required
 
@@ -73,7 +73,15 @@ def account():
     return render_template('account.html', title='Account', form=form)
 
 
-# @app.route("<dorm_id>/unit<drosher_id>/load/new")
+@app.route("/dorm<dorm_id>")
+def laundromat(dorm_id):
+    dorm = Laundromat.query.filter_by(id=dorm_id).first()
+    washers = dorm.droshers.filter_by(is_washer=True).all()
+    dryers = dorm.droshers.filter_by(is_washer=False).all()
+    return render_template('laundromat.html', dorm=dorm, washers=washers, dryers=dryers)
+
+
+# @app.route("/dorm<dorm_id>/unit<drosher_id>/load/new")
 # def create_load(dorm_id, drosher_id):
 #     form = CreateLoadForm(drosher_id)
 #     return render_template('create_load.html', title='Next Load', form=form)

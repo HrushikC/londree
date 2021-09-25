@@ -1,0 +1,18 @@
+{% extends "layout.html" %}
+{% block content %}
+    <div class="content-section">
+      <div class="media">
+        <div class="media-body text-center">
+          <h2 class="account-heading">{{ dorm.sub_location }}</h2>
+          <h4 class="account-heading">Washers</h4>
+          {% for i in range(washers|length) %}
+            <a class="text-secondary mb-4" href="">{{ washers[i] }}{{ i+1 }}</a></br>
+          {% endfor %}
+          <h4 class="account-heading">Dryers</h4>
+          {% for i in range(dryers|length) %}
+          <a class="text-secondary mb-4" href="">{{ dryers[i] }}{{ i+1 }}</a></br>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+{% endblock content %}
