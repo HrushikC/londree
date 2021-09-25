@@ -4,6 +4,11 @@ from components.forms import RegistrationForm, LoginForm, UpdateAccountForm
 from components.models import User, Laundromat, Drosher
 from flask_login import login_user, current_user, logout_user, login_required
 
+status = {
+    0 : "Vacant",
+    1 : "Full",
+    2 : "Ready"
+}
 
 @app.route("/")
 @app.route("/home")
