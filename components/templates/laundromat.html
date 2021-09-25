@@ -2,15 +2,16 @@
 {% block content %}
     <div class="content-section">
       <div class="media">
-        <div class="media-body text-center">
-          <h2 class="account-heading">{{ dorm.sub_location }}</h2>
-          <h4 class="account-heading">Washers</h4>
+        <div class="media-body">
+          <h2 class="account-heading border-bottom mb-4">{{ dorm.sub_location }}</h2>
+          <h4>Washers</h4>
           {% for i in range(washers|length) %}
-            <a class="text-secondary mb-4" href="">{{ washers[i] }}{{ i+1 }}</a></br>
+            <a class="text-secondary mb-4" href="">Washer-{{ i+1 }}</a></br>
           {% endfor %}
-          <h4 class="account-heading">Dryers</h4>
+        </br>
+          <h4>Dryers</h4>
           {% for i in range(dryers|length) %}
-          <a class="text-secondary mb-4" href="">{{ dryers[i] }}{{ i+1 }}</a></br>
+            <a class="text-secondary mb-4" href="">Dryer-{{ i+1 }}</a></br>
           {% endfor %}
         </div>
       </div>
