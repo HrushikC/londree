@@ -1,7 +1,7 @@
 from flask import render_template, url_for, flash, redirect, request
 from components import app, db, bcrypt
-from components.forms import RegistrationForm, LoginForm
-from components.models import User
+from components.forms import RegistrationForm, LoginForm, UpdateAccountForm, CreateLoadForm
+from components.models import User, Laundromat, Drosher
 from flask_login import login_user, current_user, logout_user, login_required
 
 
@@ -54,7 +54,26 @@ def logout():
     return redirect(url_for('home'))
 
 
-@app.route("/wash-history")
+@app.route("/account", methods=['GET', 'POST'])
 @login_required
-def wash_history():
-    return render_template('wash_history.html', title='History')
+def account():
+    form = UpdateAccountForm()
+    if form.validate_on_submit():
+        if current_user.username != form.username.data or current_user.email != form.email.data:
+            current_user.username = form.username.data
+            current_user.email = form.email.data
+            db.session.commit()
+            flash('Your account has been updated!', 'success')
+        else:
+            flash('No change detected for update.', 'info')
+        return redirect(url_for('account'))
+    elif request.method == 'GET':
+        form.username.data = current_user.username
+        form.email.data = current_user.email
+    return render_template('account.html', title='Account', form=form)
+
+
+# @app.route("<dorm_id>/unit<drosher_id>/load/new")
+# def create_load(dorm_id, drosher_id):
+#     form = CreateLoadForm(drosher_id)
+#     return render_template('create_load.html', title='Next Load', form=form)

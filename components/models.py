@@ -12,7 +12,6 @@ class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(20), unique=True, nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
-    image_file = db.Column(db.String(20), nullable=False, default='default.jpg')
     password = db.Column(db.String(60), nullable=False)
     loads = db.relationship('Load', backref='owner', lazy=True)
 
@@ -47,6 +46,7 @@ class Load(db.Model):
     duration = db.Column(db.Integer, nullable=False)  # minutes
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     drosher_id = db.Column(db.Integer, db.ForeignKey('drosher.id'), nullable=False)
+    # Need to figure out a choice column for STATUS.
 
     def __repr__(self):
         return f"Load(Owner: '{self.user_id}', Drosher: '{self.drosher_id}', " \
