@@ -46,6 +46,8 @@ class Load(db.Model):
     duration = db.Column(db.Integer, nullable=False)  # minutes
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     drosher_id = db.Column(db.Integer, db.ForeignKey('drosher.id'), nullable=False)
+    status = db.Column(db.Integer, nullable=False) 
+
     # Need to figure out a choice column for STATUS.
 
     def __repr__(self):
