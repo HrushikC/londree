@@ -1,0 +1,8 @@
+Flask-Migrate instructions:
+1. Create environment variables - "export FLASK_APP=components/__init__.py"
+2. Create migration folder (First-time only. Ignore if pulled migrations folder) - "flask db init"
+3. Create Migration for new Table alterations - "flask db migrate"
+4. Alter migration so that db doesn't break - i.e. any default values must be specifically indicated by server_default="x"
+5. Implement new attributes in db - "flask db upgrade"
+6. Undo step 4 by this command - "flask db downgrade"
+(Note: Only step 5 is needed to update local database after pulling)
