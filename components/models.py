@@ -35,7 +35,7 @@ class Drosher(db.Model):
     available = db.Column(db.Boolean, default=True, nullable=False)
     laundromat_id = db.Column(db.Integer, db.ForeignKey('laundromat.id'), nullable=False)
     load = db.relationship('Load', backref='drosher', lazy=True)
-    status = db.Column(db.Integer, nullable=False, default=0)
+    status = db.Column(db.Integer, default=0, nullable=False)
 
     def __repr__(self):
         return f"Drosher('{self.is_washer}', '{self.available}')"
