@@ -35,6 +35,7 @@ class Drosher(db.Model):
     available = db.Column(db.Boolean, default=True, nullable=False)
     laundromat_id = db.Column(db.Integer, db.ForeignKey('laundromat.id'), nullable=False)
     load = db.relationship('Load', backref='drosher', lazy=True)
+    status = db.Column(db.Integer, nullable=False, default=0)
 
     def __repr__(self):
         return f"Drosher('{self.is_washer}', '{self.available}')"
@@ -46,9 +47,6 @@ class Load(db.Model):
     duration = db.Column(db.Integer, nullable=False)  # minutes
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     drosher_id = db.Column(db.Integer, db.ForeignKey('drosher.id'), nullable=False)
-    status = db.Column(db.Integer, nullable=False) 
-
-    # Need to figure out a choice column for STATUS.
 
     def __repr__(self):
         return f"Load(Owner: '{self.user_id}', Drosher: '{self.drosher_id}', " \
