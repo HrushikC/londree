@@ -1,14 +1,9 @@
 from flask import render_template, url_for, flash, redirect, request
 from components import app, db, bcrypt
-from components.forms import RegistrationForm, LoginForm, UpdateAccountForm
-from components.models import User, Laundromat, Drosher
+from components.forms import RegistrationForm, LoginForm, UpdateAccountForm, CreateLoadForm
+from components.models import User, Laundromat, Drosher, Load
 from flask_login import login_user, current_user, logout_user, login_required
 
-status = {
-    0 : "Vacant",
-    1 : "Full",
-    2 : "Ready"
-}
 
 @app.route("/")
 @app.route("/home")
@@ -78,15 +73,26 @@ def account():
     return render_template('account.html', title='Account', form=form)
 
 
-@app.route("/dorm<dorm_id>")
+@app.route("/dorm<int:dorm_id>")
 def laundromat(dorm_id):
     dorm = Laundromat.query.filter_by(id=dorm_id).first()
     washers = dorm.droshers.filter_by(is_washer=True).all()
     dryers = dorm.droshers.filter_by(is_washer=False).all()
-    return render_template('laundromat.html', dorm=dorm, washers=washers, dryers=dryers)
+    status = {
+        0: "Vacant",
+        1: "Full",
+        2: "Ready"
+    }
+    return render_template('dorm.html', title='My Dorm', dorm=dorm, washers=washers, dryers=dryers, state=status)
 
 
-# @app.route("/dorm<dorm_id>/unit<drosher_id>/load/new")
-# def create_load(dorm_id, drosher_id):
-#     form = CreateLoadForm(drosher_id)
-#     return render_template('create_load.html', title='Next Load', form=form)
+@app.route("/unit<int:drosher_id>/load/new")
+def create_load(drosher_id):
+    form = CreateLoadForm()
+    if form.validate_on_submit():
+        drosher = Drosher.query.filter_by(id=drosher_id).first()
+        load = Load(duration=form.minutes.data, drosher_id=drosher_id, user_id=current_user.id)
+        drosher.load = load
+        db.session.add(load)
+        db.commit()
+    return render_template('create_load.html', title='New Load', form=form)

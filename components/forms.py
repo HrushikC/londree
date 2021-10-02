@@ -50,12 +50,10 @@ class UpdateAccountForm(FlaskForm):
                 raise ValidationError('That email is taken. Please choose a different one.')
 
 
-# class CreateLoadForm(FlaskForm, id):
-#     minutes = IntegerField('Time(mins)', validators=[DataRequired(), Length(min=10, max=90)])
-#
-#     def validate_load(self):
-#         user = User.query.filter_by(username=current_user.username).first()
-#         unit = Drosher.query.filter_by(id=id).first()
-#         if user.loads.drosher.filter_by(is_washer=unit.is_washer).all().len() > 1:
-#             raise ValidationError('Cannot use more than 2 ' +
-#                                   ('washers' if unit.is_washer else 'dryers') + ' at once. Please try again later.')
+class CreateLoadForm(FlaskForm):
+    minutes = IntegerField('Time(mins)', validators=[DataRequired(), Length(min=5, max=120)])
+
+    def validate_load(self):
+        user = User.query.filter_by(username=current_user.username).first()
+        if user.loads.drosher.all().len() > 1:
+            raise ValidationError('Cannot have more than 2 active loads at once. Please try again later.')

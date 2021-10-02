@@ -44,6 +44,7 @@ class Drosher(db.Model):
 class Load(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     created_time = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+    active = db.Column(db.Boolean, nullable=False, default=True)
     duration = db.Column(db.Integer, nullable=False)  # minutes
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     drosher_id = db.Column(db.Integer, db.ForeignKey('drosher.id'), nullable=False)

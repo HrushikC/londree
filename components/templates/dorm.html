@@ -16,10 +16,14 @@
                 <span aria-hidden="true">&times;</span>
               </button>
             </div>
-            <div class="modal-body">Status __fill with status__</div>
+            <div class="modal-body">Status: {{state[washers[w].status]}}</div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-              <button type="button" class="btn btn-primary">Save</button>
+              {% if not washers[w].load %}
+              <form action="{{ url_for('create_load', drosher_id=washers[w].id) }}">
+               <button type="submit" class="btn btn-primary">Create Load</button>
+              </form>
+              {% endif %}
             </div>
           </div>
         </div>
@@ -29,7 +33,7 @@
       </br>
       <h4>Dryers</h4>
       {% for d in range(dryers|length) %}
-      <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#{{i}}">Dryer {{ d+1 }}</button>
+      <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#{{d}}">Dryer {{ d+1 }}</button>
       <div class="modal fade" id="{{d}}" tabindex="-1" role="dialog" aria-labelledby="popupDryerModal" aria-hidden="true">
         <div class="modal-dialog" role="document">
           <div class="modal-content">
@@ -39,10 +43,14 @@
                 <span aria-hidden="true">&times;</span>
               </button>
             </div>
-            <div class="modal-body">Status __fill with status__</div>
+            <div class="modal-body">Status: {{state[dryers[d].status]}}</div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-              <button type="button" class="btn btn-primary">Save</button>
+              {% if not dryers[d].load %}
+              <form action="{{ url_for('create_load', drosher_id=dryers[d].id) }}">
+               <button type="submit" class="btn btn-primary">Create Load</button>
+              </form>
+              {% endif %}
             </div>
           </div>
         </div>
