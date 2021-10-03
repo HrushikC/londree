@@ -13,7 +13,10 @@ def home():
 
 @app.route("/laundry")
 def laundry():
-    return render_template('laundry.html')
+    if current_user.is_authenticated:
+        return redirect(url_for('laundromat', dorm_id=1))  # dorm id associated w user
+    dorms = Laundromat.query.all()
+    return render_template('laundry.html', dorms=dorms)
 
 
 @app.route("/register", methods=['GET', 'POST'])

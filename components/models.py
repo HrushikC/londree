@@ -16,7 +16,7 @@ class User(db.Model, UserMixin):
     loads = db.relationship('Load', backref='owner', lazy=True)
 
     def __repr__(self):
-        return f"User('{self.username}', '{self.email}', '{self.image_file}')"
+        return f"User('{self.username}', '{self.email}')"
 
 
 class Laundromat(db.Model):
