@@ -31,9 +31,13 @@ def startLoad():
         runtime=60*60
     if drosher_local_id and drosher_local_id >= 0:
         drosher = Drosher.query.filter_by(laundromat_id=laundromat_id, is_washer=is_washer, end_time=0, local_id=drosher_local_id).first()
+        if not drosher:
+            return jsonify({"message": "Load unable to start. Maybe the local_id is incorrect or the washer is still running?"})
         drosher.explicitly_filled = True
     else:
         drosher = Drosher.query.filter_by(laundromat_id=laundromat_id, is_washer=is_washer, end_time=0).first()
+        if not drosher:
+            return jsonify({"message": "Load not started, no available machines found"})
         drosher.explicitly_filled = False
     drosher.end_time = datetime.now().strftime('%s') + str(runtime)
     db.session.add(drosher)
@@ -56,6 +60,8 @@ def emptyLoad():
     data = request.get_json(silent=True)
     drosher_id = data.get('drosher_id')
     drosher = Drosher.query.filter_by(id=drosher_id).first()
+    if drosher.end_time == 0:
+        return jsonify({"message": "Drosher already empty"})
     drosher.end_time = 0
     db.session.add(drosher)
     db.session.commit()
