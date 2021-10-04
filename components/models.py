@@ -13,42 +13,38 @@ class User(db.Model, UserMixin):
     username = db.Column(db.String(20), unique=True, nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
     password = db.Column(db.String(60), nullable=False)
-    loads = db.relationship('Load', backref='owner', lazy=True)
 
     def __repr__(self):
-        return f"User('{self.username}', '{self.email}')"
+        return f"User('{self.username}', '{self.email}', '{self.image_file}')"
 
+    def as_dict(self):
+       return {c.name: getattr(self, c.name) for c in self.__table__.columns}
 
 class Laundromat(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    location = db.Column(db.String(60), nullable=False)
-    sub_location = db.Column(db.String(30), unique=True, nullable=False)
+    name = db.Column(db.String(60), nullable=False)
     droshers = db.relationship('Drosher', backref='laundromat', lazy="dynamic")
 
     def __repr__(self):
-        return f"Laundromat('{self.sub_location}')"
+        return f"Laundromat('{self.name}')"
 
+    def as_dict(self):
+       return {c.name: getattr(self, c.name) for c in self.__table__.columns}
 
 class Drosher(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     is_washer = db.Column(db.Boolean, default=True, nullable=False)
-    available = db.Column(db.Boolean, default=True, nullable=False)
+        #If machine is a washer, true. If it is a dryer, false
+    end_time = db.Column(db.Integer, default=0, nullable=False)
+        #Time when cycle is complete, is 0 when not running # -1 when out of service?
+    local_id = db.Column(db.Integer, default=0)
+        #Number on washer at location
     laundromat_id = db.Column(db.Integer, db.ForeignKey('laundromat.id'), nullable=False)
-    load = db.relationship('Load', backref='drosher', lazy=True)
-    status = db.Column(db.Integer, default=0, nullable=False)
+    explicitly_filled = db.Column(db.Boolean, default=True, nullable=False)
+        #If user specified the local_id of the machine they are using, this is true. False if not.
 
     def __repr__(self):
-        return f"Drosher('{self.is_washer}', '{self.available}')"
+        return f"Drosher('{self.id}', '{self.is_washer}', '{self.end_time}')"
 
-
-class Load(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    created_time = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
-    active = db.Column(db.Boolean, nullable=False, default=True)
-    duration = db.Column(db.Integer, nullable=False)  # minutes
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    drosher_id = db.Column(db.Integer, db.ForeignKey('drosher.id'), nullable=False)
-
-    def __repr__(self):
-        return f"Load(Owner: '{self.user_id}', Drosher: '{self.drosher_id}', " \
-               f"Started: '{self.created_time}', Duration(mins): '{self.duration}')"
+    def as_dict(self):
+       return {c.name: getattr(self, c.name) for c in self.__table__.columns}

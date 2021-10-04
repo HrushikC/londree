@@ -1,101 +1,62 @@
-from flask import render_template, url_for, flash, redirect, request
+from flask import render_template, url_for, flash, redirect, request, jsonify
 from components import app, db, bcrypt
 from components.forms import RegistrationForm, LoginForm, UpdateAccountForm, CreateLoadForm
-from components.models import User, Laundromat, Drosher, Load
+from components.models import User, Laundromat, Drosher
 from flask_login import login_user, current_user, logout_user, login_required
+from datetime import datetime
+
+@app.route("/laundromat/<int:laundromat_id>", methods=['GET'])
+def laundromat(laundromat_id):
+    laundromat = Laundromat.query.filter_by(id=laundromat_id).first()
+    droshers = Drosher.query.filter_by().all()
+    retdroshers = []
+    for item in droshers:
+        retdroshers.append(item.as_dict())
+    return jsonify(droshers=retdroshers)
 
 
-@app.route("/")
-@app.route("/home")
-def home():
-    return render_template('home.html')
+@app.route("/startLoad", methods=['POST'])
+def startLoad():
+    data = request.get_json(silent=True)
+    print(data)
+    type = data.get('type')
+    laundromat_id = data.get('laundromat_id')
+    drosher_local_id = data.get('drosher_local_id')
+
+    if data.get('type') == 'wash':
+        is_washer=True
+        runtime=60*30
+    else:
+        is_washer=False
+        runtime=60*60
+    if drosher_local_id and drosher_local_id >= 0:
+        drosher = Drosher.query.filter_by(laundromat_id=laundromat_id, is_washer=is_washer, end_time=0, local_id=drosher_local_id).first()
+        drosher.explicitly_filled = True
+    else:
+        drosher = Drosher.query.filter_by(laundromat_id=laundromat_id, is_washer=is_washer, end_time=0).first()
+        drosher.explicitly_filled = False
+    drosher.end_time = datetime.now().strftime('%s') + str(runtime)
+    db.session.add(drosher)
+    db.session.commit()
+    return jsonify({"message": "Load started successfully", "drosher_id": drosher.id})
 
 
-@app.route("/laundry")
-def laundry():
-    if current_user.is_authenticated:
-        return redirect(url_for('laundromat', dorm_id=1))  # dorm id associated w user
-    dorms = Laundromat.query.all()
-    return render_template('laundry.html', dorms=dorms)
-
-
-@app.route("/register", methods=['GET', 'POST'])
-def register():
-    if current_user.is_authenticated:
-        return redirect(url_for('home'))
-    form = RegistrationForm()
-    if form.validate_on_submit():
-        hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
-        user = User(username=form.username.data, email=form.email.data, password=hashed_password)
-        db.session.add(user)
-        db.session.commit()
-        flash('Your account has been created! You are now able to log in', 'success')
-        return redirect(url_for('login'))
-    return render_template('register.html', title='Register', form=form)
-
-
-@app.route("/login", methods=['GET', 'POST'])
-def login():
-    if current_user.is_authenticated:
-        return redirect(url_for('home'))
-    form = LoginForm()
-    if form.validate_on_submit():
-        user = User.query.filter_by(email=form.email.data).first()
-        if user and bcrypt.check_password_hash(user.password, form.password.data):
-            login_user(user, remember=form.remember.data)
-            next_page = request.args.get('next')
-            return redirect(next_page) if next_page else redirect(url_for('home'))
-        else:
-            flash('Login Unsuccessful. Please check email and password', 'danger')
-    return render_template('login.html', title='Login', form=form)
-
-
-@app.route("/logout")
-def logout():
-    logout_user()
-    flash('You have successfully logged out!', 'success')
-    return redirect(url_for('home'))
-
-
-@app.route("/account", methods=['GET', 'POST'])
-@login_required
-def account():
-    form = UpdateAccountForm()
-    if form.validate_on_submit():
-        if current_user.username != form.username.data or current_user.email != form.email.data:
-            current_user.username = form.username.data
-            current_user.email = form.email.data
-            db.session.commit()
-            flash('Your account has been updated!', 'success')
-        else:
-            flash('No change detected for update.', 'info')
-        return redirect(url_for('account'))
-    elif request.method == 'GET':
-        form.username.data = current_user.username
-        form.email.data = current_user.email
-    return render_template('account.html', title='Account', form=form)
-
-
-@app.route("/dorm<int:dorm_id>")
-def laundromat(dorm_id):
-    dorm = Laundromat.query.filter_by(id=dorm_id).first()
-    washers = dorm.droshers.filter_by(is_washer=True).all()
-    dryers = dorm.droshers.filter_by(is_washer=False).all()
-    status = {
-        0: "Vacant",
-        1: "Full",
-        2: "Ready"
-    }
-    return render_template('dorm.html', title='My Dorm', dorm=dorm, washers=washers, dryers=dryers, state=status)
-
-
-@app.route("/unit<int:drosher_id>/load/new")
-def create_load(drosher_id):
-    form = CreateLoadForm()
-    if form.validate_on_submit():
-        drosher = Drosher.query.filter_by(id=drosher_id).first()
-        load = Load(duration=form.minutes.data, drosher_id=drosher_id, user_id=current_user.id)
-        drosher.load = load
-        db.session.add(load)
-        db.commit()
-    return render_template('create_load.html', title='New Load', form=form)
+@app.route("/emptyLoad", methods=['POST'])
+def emptyLoad():
+    """
+    # How do you ensure that nobody stops another person's load
+      # Might need users
+      # People stop other people's loads without their permission in real life too
+    Error would be caused if
+    1. u1 set a load
+    2. u1 physically empties the load but does not log it
+    3. u2 adds another load to that washer                                                3. u2 adds another load
+    4. u1 recognizes their mistake and unloads on the app while u2's load is still in
+    """
+    data = request.get_json(silent=True)
+    drosher_id = data.get('drosher_id')
+    drosher = Drosher.query.filter_by(id=drosher_id).first()
+    drosher.end_time = 0
+    db.session.add(drosher)
+    db.session.commit()
+    return jsonify({"message": "Load emptied successfully"})

@@ -1,0 +1,82 @@
+{
+	"info": {
+		"_postman_id": "8f6657c3-f600-40ea-8fc8-8e757e889a2f",
+		"name": "londree",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Get Loads",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:5000/laundromat/1",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"laundromat",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Start Load",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"type\": \"wash\",\n    \"laundromat_id\": 1,\n    \"drosher_local_id\": 1\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:5000/startLoad",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"startLoad"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Empty Load",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"drosher_id\": 1\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:5000/emptyLoad",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"emptyLoad"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
