@@ -1,12 +1,20 @@
 from components import db
-from components.models import Drosher, Laundromat
+from components.models import User, Drosher, Laundromat
+
+db.drop_all()
 db.create_all()
-l1 = Laundromat(name="OSU Taylor Tower")
-d1 = Drosher(is_washer=True, end_time=0, laundromat_id=1, local_id=1, explicitly_filled=True)
-d2 = Drosher(is_washer=True, end_time=0, laundromat_id=1, local_id=2, explicitly_filled=True)
-d3 = Drosher(is_washer=False, end_time=0, laundromat_id=1, local_id=3, explicitly_filled=True)
+u1 = User(email="testuser1@osu.edu", default_laundromat_id=1)
+u2 = User(email="testuser2@osu.edu", default_laundromat_id=1)
+l1 = Laundromat(university="Ohio State University", dorm="Taylor Tower")
+w1 = Drosher(is_washer=True, end_time=0, laundromat_id=1, local_id=1)
+w2 = Drosher(is_washer=True, end_time=0, laundromat_id=1, local_id=2)
+d1 = Drosher(is_washer=False, end_time=0, laundromat_id=1, local_id=1)
+d2 = Drosher(is_washer=False, end_time=0, laundromat_id=1, local_id=2)
+db.session.add(u1)
+db.session.add(u2)
 db.session.add(l1)
+db.session.add(w1)
+db.session.add(w2)
 db.session.add(d1)
 db.session.add(d2)
-db.session.add(d3)
 db.session.commit()

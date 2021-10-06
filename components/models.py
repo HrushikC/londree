@@ -47,7 +47,7 @@ class Drosher(db.Model):
         # Number on washer at location
     laundromat_id = db.Column(db.Integer, db.ForeignKey('laundromat.id'), nullable=False)
         # If user specified the local_id of the machine they are using, this is true. False if not.
-    used_by = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    used_by = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=True)
 
     def __repr__(self):
         return f"Drosher('{self.id}', '{self.is_washer}', '{self.end_time}')"
