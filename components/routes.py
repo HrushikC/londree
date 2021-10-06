@@ -5,6 +5,7 @@ from components.models import User, Laundromat, Drosher
 from flask_login import login_user, current_user, logout_user, login_required
 from datetime import datetime
 
+
 @app.route("/laundromat/<int:laundromat_id>", methods=['GET'])
 def laundromat(laundromat_id):
     laundromat = Laundromat.query.filter_by(id=laundromat_id).first()

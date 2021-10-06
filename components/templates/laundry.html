@@ -5,7 +5,7 @@
     <div class="media-body">
       <h2 class="account-heading border-bottom mb-4">Select Location: </h2>
       {% for i in dorms %}
-      <a href="{{ url_for('laundromat', dorm_id=i.id) }}">{{ i.sub_location }}</a></br>
+      <a href="{{ url_for('laundromat', dorm_id=i.id) }}">{{ i.dorm }}</a></br>
       {% endfor %}
     </div>
   </div>
