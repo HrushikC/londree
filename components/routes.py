@@ -2,6 +2,7 @@ from flask import render_template, url_for, flash, redirect, request, jsonify
 from components import app, db, bcrypt
 from components.forms import RegistrationForm, LoginForm, UpdateAccountForm, CreateLoadForm
 from components.models import User, Laundromat, Drosher
+from components.schemas import UserSchema, LaundromatSchema, DrosherSchema
 from flask_login import login_user, current_user, logout_user, login_required
 from datetime import datetime
 
@@ -13,12 +14,10 @@ def menu():
 
 @app.route("/laundromat/<int:laundromat_id>", methods=['GET'])
 def laundromat(laundromat_id):
-    laundromat = Laundromat.query.filter_by(id=laundromat_id).first()
-    droshers = Drosher.query.filter_by().all()
-    retdroshers = []
-    for item in droshers:
-        retdroshers.append(item.as_dict())
-    return jsonify(droshers=retdroshers)
+    droshers = Drosher.query.filter_by(laundromat_id=laundromat_id).all()
+    droshers_schema = DrosherSchema(many=True)
+    droshers_data = droshers_schema.dump(droshers)
+    return jsonify(droshers=droshers_data)
 
 
 @app.route("/startLoad", methods=['POST'])
@@ -33,8 +32,8 @@ def startLoad():
         is_washer = True
         runtime = 60*30
     else:
-        is_washer=False
-        runtime=60*60
+        is_washer = False
+        runtime = 60*60
     if drosher_local_id and drosher_local_id >= 0:
         drosher = Drosher.query.filter_by(laundromat_id=laundromat_id, is_washer=is_washer, end_time=0, local_id=drosher_local_id).first()
         if not drosher:
