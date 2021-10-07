@@ -1,5 +1,5 @@
 from datetime import datetime
-from components import db, login_manager
+from components import db, ma, login_manager
 from flask_login import UserMixin
 
 
@@ -20,6 +20,10 @@ class User(db.Model, UserMixin):
 
     def as_dict(self):
         return {c.name: getattr(self, c.name) for c in self.__table__.columns}
+
+
+class UserSchema(ma.Schema):
+    class Meta:
 
 
 class Laundromat(db.Model):

@@ -6,6 +6,11 @@ from flask_login import login_user, current_user, logout_user, login_required
 from datetime import datetime
 
 
+@app.route("/")
+def menu():
+    return jsonify()
+
+
 @app.route("/laundromat/<int:laundromat_id>", methods=['GET'])
 def laundromat(laundromat_id):
     laundromat = Laundromat.query.filter_by(id=laundromat_id).first()
@@ -25,8 +30,8 @@ def startLoad():
     drosher_local_id = data.get('drosher_local_id')
 
     if data.get('type') == 'wash':
-        is_washer=True
-        runtime=60*30
+        is_washer = True
+        runtime = 60*30
     else:
         is_washer=False
         runtime=60*60
