@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { TouchableOpacity, View, Text, TextInput } from 'react-native';
 import styles from './styles.js';
 import axios from 'axios';
+import CustomButton from './components/CustomButton';
 
 export default function App() {
   const [ laundromat, setLaundromat ] = useState({
@@ -16,7 +17,13 @@ export default function App() {
     availableDryers: '-',
     totalDryers: '-'
   })
-  useEffect(() => {
+  const [ loadData, setLoadData ] = useState({
+    isWasher: true,
+    machineNumber: null,
+    isRunning: false
+  })
+
+  function updateDroshers() {
     //get drosher availability for location
     axios.get(`http://localhost:5000/laundromat/${laundromat.id}`).then((result) => {
       //set droshers array
@@ -41,6 +48,10 @@ export default function App() {
       });
       setDrosherAvailability(da);
     });
+  }
+
+  useEffect(() => {
+    updateDroshers();
   }, []);
 
   return (
@@ -53,20 +64,14 @@ export default function App() {
       </View>
       <View style={styles.lower}>
 	     <View style={styles.machineSelect}>
-	      <TouchableOpacity>
-	       <Text style={styles.machineSelectButton}>Washer</Text>
-	      </TouchableOpacity>
-	      <TouchableOpacity>
-	       <Text style={styles.machineSelectButton}>Dryer</Text>
-	      </TouchableOpacity>
+        <CustomButton text="Washer" active={true} />
+        <CustomButton text="Dryer" active={false} />
 	     </View>
 	     <View style={styles.machineNumInputContainer}>
 	      <Text style={styles.textMain}>Machine number: </Text>
         <TextInput style={styles.machineNumInput}></TextInput>
 	     </View>
-	     <TouchableOpacity>
-	      <Text style={styles.machineSelectButton}>Start a Load</Text>
-	     </TouchableOpacity>
+       <CustomButton text="Start a load" active={true} />
       </View>
     </View>
   );
