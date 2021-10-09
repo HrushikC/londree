@@ -32,6 +32,13 @@ class App extends Component {
     this.setState({machineNumber:Number(text)});
   }
 
+  setAsWasher = () => {
+    this.setState({isWasher: true})
+  }
+  setAsDryer = () => {
+    this.setState({isWasher: false})
+  }
+
   componentDidMount() {
     this.updateDroshers();
   }
@@ -108,10 +115,17 @@ class App extends Component {
             `Load finishes at ${getEndTime()}`
             : ''
          }</Text>
-  	     <View style={styles.machineSelect}>
-          <CustomButton text="Washer" active={true} />
-          <CustomButton text="Dryer" active={false} />
-  	     </View>
+         {
+           this.state.isWasher ?
+            <View style={styles.machineSelect}>
+              <CustomButton text="Washer" active={true} clickAction={this.setAsWasher}/>
+              <CustomButton text="Dryer" active={false} clickAction={this.setAsDryer}/>
+            </View>
+            : <View style={styles.machineSelect}>
+                <CustomButton text="Washer" active={false} clickAction={this.setAsWasher}/>
+                <CustomButton text="Dryer" active={true} clickAction={this.setAsDryer}/>
+              </View>
+         }
   	     <View style={styles.machineNumInputContainer}>
   	      <Text style={styles.textMain}>Machine number: </Text>
           <TextInput style={styles.machineNumInput} value={this.state.machineNumber} onChangeText={(text) => this.setMachineNumber(text)}></TextInput>
