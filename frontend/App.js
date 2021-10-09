@@ -20,8 +20,37 @@ export default function App() {
   const [ loadData, setLoadData ] = useState({
     isWasher: true,
     machineNumber: null,
+    drosherId: null,
     isRunning: false
   })
+
+  function startLoad() {
+    //check that load isn't running
+    if (!loadData.isRunning) {
+      axios.post(`http://localhost:5000/startLoad`, {
+        isWash: isWasher,
+        drosher_local_id: machineNumber,
+        laundromat_id: laundromat.id
+      }).then((result) => {
+        if (result.data.status == 1) {
+          let newLoadData = loadData;
+          newLoadData.isRunning = true;
+          setLoadData(newLoadData);
+        }
+      });
+    }
+  }
+
+  function stopLoad() {
+    //check that load is running
+    if (loadData.isRunning) {
+      axios.post(`http://localhost:5000/emptyLoad`, {
+        drosher_id: drosherId
+      }).then((result) => {
+
+      });
+    }
+  }
 
   function updateDroshers() {
     //get drosher availability for location
@@ -71,7 +100,11 @@ export default function App() {
 	      <Text style={styles.textMain}>Machine number: </Text>
         <TextInput style={styles.machineNumInput}></TextInput>
 	     </View>
-       <CustomButton text="Start a load" active={true} />
+       {
+         loadData.isRunning ?
+          <CustomButton text="Stop load" active={true} />
+          : <CustomButton text="Start a load" active={true} />
+       }
       </View>
     </View>
   );

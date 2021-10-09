@@ -6,7 +6,7 @@
 	},
 	"item": [
 		{
-			"name": "Get Loads",
+			"name": "Get Droshers",
 			"request": {
 				"method": "GET",
 				"header": [],
@@ -31,7 +31,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"type\": \"wash\",\n    \"laundromat_id\": 1,\n    \"drosher_local_id\": 1\n}",
+					"raw": "{\n    \"isWash\": true,\n    \"laundromat_id\": 1,\n    \"drosher_local_id\": 1\n}",
 					"options": {
 						"raw": {
 							"language": "json"
