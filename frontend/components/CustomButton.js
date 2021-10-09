@@ -17,6 +17,8 @@ const styles = StyleSheet.create({
 		textAlign: "center",
 		backgroundColor: "#339AE4",
 		color: "white",
+    borderWidth: "1px",
+    borderColor: "#cacaca",
 		borderRadius: "5px",
 	},
 	machineSelectButtonInactive: {
@@ -25,9 +27,7 @@ const styles = StyleSheet.create({
 		margin: "10px",
 		textAlign: "center",
 		color: "white",
-		borderWidth: "1px",
 		backgroundColor: "#339AE4",
-		borderColor: "#cacaca",
 		borderRadius: "5px",
 	},
 })

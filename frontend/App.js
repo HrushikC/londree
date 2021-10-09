@@ -27,6 +27,10 @@ class App extends Component {
     };
   }
 
+  setMachineNumber = (text) => {
+    this.setState({machineNumber:Number(text)});
+  }
+
   componentDidMount() {
     this.updateDroshers();
   }
@@ -39,7 +43,6 @@ class App extends Component {
         drosher_local_id: this.state.machineNumber,
         laundromat_id: this.state.laundromat.id
       }).then((result) => {
-        console.log(result);
         if (result.data.status == 1) {
           this.setState({isRunning: true, drosherId: result.data.drosher_id})
         }
@@ -101,7 +104,7 @@ class App extends Component {
   	     </View>
   	     <View style={styles.machineNumInputContainer}>
   	      <Text style={styles.textMain}>Machine number: </Text>
-          <TextInput style={styles.machineNumInput}></TextInput>
+          <TextInput style={styles.machineNumInput} value={this.state.machineNumber} onChangeText={(text) => this.setMachineNumber(text)}></TextInput>
   	     </View>
          {
            this.state.isRunning ?
