@@ -22,11 +22,15 @@ class App extends Component {
       },
       loadData: {
         isWasher: true,
-        machineNumber: null,
+        machineNumber: 1,
         drosherId: null,
         isRunning: false
       }
     };
+  }
+
+  componentDidMount() {
+    this.updateDroshers();
   }
 
   startLoad = () => {
@@ -85,10 +89,6 @@ class App extends Component {
     });
   }
 
-  componentDidMount() {
-    this.updateDroshers();
-  }
-
   render() {
     let da = this.state.drosherAvailability;
     return(
@@ -110,8 +110,8 @@ class App extends Component {
   	     </View>
          {
            this.state.loadData.isRunning ?
-            <CustomButton text="Stop load" active={true} />
-            : <CustomButton text="Start a load" active={true} />
+            <CustomButton text="Stop load" active={true} clickAction={this.stopLoad}/>
+            : <CustomButton text="Start a load" active={true} clickAction={this.startLoad} />
          }
         </View>
       </View>

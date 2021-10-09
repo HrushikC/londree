@@ -2,8 +2,8 @@ import React from 'react';
 import { TouchableOpacity, Text } from 'react-native';
 import { StyleSheet } from 'react-native';
 
-const CustomButton = ({ text, active }) => (
-  <TouchableOpacity>
+const CustomButton = ({ text, active, clickAction }) => (
+  <TouchableOpacity onPress={clickAction}>
     {active ? <Text style={styles.machineSelectButtonActive}>{text}</Text>
       : <Text style={styles.machineSelectButtonInactive}>{text}</Text>}
   </TouchableOpacity>
