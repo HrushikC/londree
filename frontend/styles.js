@@ -37,6 +37,15 @@ const mainStyle = StyleSheet.create({
 		//borderWidth: "1px",
 		//borderColor: "white",
 		//borderRadius: "5px",
+	},
+	machineNumInputContainer: {
+		flex: 1,
+		flexDirection: 'row'
+	},
+	machineNumInput: {
+		backgroundColor: 'white',
+		width: '30px',
+		paddingHorizontal: '5px'
 	}
 });
 

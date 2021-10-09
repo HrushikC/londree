@@ -71,3 +71,14 @@ def emptyLoad():
     db.session.add(drosher)
     db.session.commit()
     return jsonify({"message": "Load emptied successfully"})
+
+# ADMIN ROUTES
+def addLaundromat(lm_name):
+    new_lm = Laundromat(name=lm_name)
+    db.session.add(new_lm)
+    db.session.commit()
+
+def addDrosher(lm_id, local_id, is_washer):
+    new_drosh = Drosher(is_washer=is_washer, end_time=0, laundromat_id=lm_id, local_id=local_id, explicitly_filled=True)
+    db.session.add(new_drosh)
+    db.session.commit()
