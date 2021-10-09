@@ -1,62 +1,67 @@
 //import * as React from "react";
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, Component } from 'react';
 import { TouchableOpacity, View, Text, TextInput } from 'react-native';
 import styles from './styles.js';
 import axios from 'axios';
 import CustomButton from './components/CustomButton';
 
-export default function App() {
-  const [ laundromat, setLaundromat ] = useState({
-    name: 'OSU Taylor Tower',
-    id: 1,
-  })
-  const [ droshers, setDroshers ] = useState([]);
-  const [ drosherAvailability, setDrosherAvailability ] = useState({
-    availableWashers: '-',
-    totalWashers: '-',
-    availableDryers: '-',
-    totalDryers: '-'
-  })
-  const [ loadData, setLoadData ] = useState({
-    isWasher: true,
-    machineNumber: null,
-    drosherId: null,
-    isRunning: false
-  })
+class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      laundromat: {
+        name: 'OSU Taylor Tower',
+        id: 1,
+      },
+      droshers: [],
+      drosherAvailability: {
+        availableWashers: '-',
+        totalWashers: '-',
+        availableDryers: '-',
+        totalDryers: '-'
+      },
+      loadData: {
+        isWasher: true,
+        machineNumber: null,
+        drosherId: null,
+        isRunning: false
+      }
+    };
+  }
 
-  function startLoad() {
+  startLoad = () => {
     //check that load isn't running
+    let loadData = this.state.loadData;
     if (!loadData.isRunning) {
       axios.post(`http://localhost:5000/startLoad`, {
-        isWash: isWasher,
-        drosher_local_id: machineNumber,
-        laundromat_id: laundromat.id
+        isWash: loadData.isWasher,
+        drosher_local_id: loadData.machineNumber,
+        laundromat_id: this.state.laundromat.id
       }).then((result) => {
         if (result.data.status == 1) {
-          let newLoadData = loadData;
+          let newLoadData = this.state.loadData;
           newLoadData.isRunning = true;
-          setLoadData(newLoadData);
+          this.setState({loadData: newLoadData})
         }
       });
     }
   }
 
-  function stopLoad() {
+  stopLoad = () => {
     //check that load is running
+    let loadData = this.state.loadData;
     if (loadData.isRunning) {
       axios.post(`http://localhost:5000/emptyLoad`, {
-        drosher_id: drosherId
+        drosher_id: loadData.drosherId
       }).then((result) => {
 
       });
     }
   }
 
-  function updateDroshers() {
+  updateDroshers = () => {
     //get drosher availability for location
-    axios.get(`http://localhost:5000/laundromat/${laundromat.id}`).then((result) => {
-      //set droshers array
-      setDroshers(result.data.droshers);
+    axios.get(`http://localhost:5000/laundromat/${this.state.laundromat.id}`).then((result) => {
       //set drosher availability data
       let da = {
         availableWashers: 0,
@@ -75,37 +80,43 @@ export default function App() {
             da.availableDryers++;
         }
       });
-      setDrosherAvailability(da);
+      //set droshers array and droshersAvailability
+      this.setState({drosherAvailability: da, droshers: result.data.droshers})
     });
   }
 
-  useEffect(() => {
-    updateDroshers();
-  }, []);
+  componentDidMount() {
+    this.updateDroshers();
+  }
 
-  return (
-    <View style={styles.body}>
-      <Text style={styles.logoText}>Londree</Text>
-      <View style={styles.upper}>
-	     <Text style={styles.textMain}>{laundromat.name}</Text>
-	     <Text style={styles.textMain}>Washers available: {drosherAvailability.availableWashers}/{drosherAvailability.totalWashers}</Text>
-	     <Text style={styles.textMain}>Dryers available: {drosherAvailability.availableDryers}/{drosherAvailability.totalDryers}</Text>
+  render() {
+    let da = this.state.drosherAvailability;
+    return(
+      <View style={styles.body}>
+        <Text style={styles.logoText}>Londree</Text>
+        <View style={styles.upper}>
+  	     <Text style={styles.textMain}>{this.state.laundromat.name}</Text>
+  	     <Text style={styles.textMain}>Washers available: {da.availableWashers}/{da.totalWashers}</Text>
+  	     <Text style={styles.textMain}>Dryers available: {da.availableDryers}/{da.totalDryers}</Text>
+        </View>
+        <View style={styles.lower}>
+  	     <View style={styles.machineSelect}>
+          <CustomButton text="Washer" active={true} />
+          <CustomButton text="Dryer" active={false} />
+  	     </View>
+  	     <View style={styles.machineNumInputContainer}>
+  	      <Text style={styles.textMain}>Machine number: </Text>
+          <TextInput style={styles.machineNumInput}></TextInput>
+  	     </View>
+         {
+           this.state.loadData.isRunning ?
+            <CustomButton text="Stop load" active={true} />
+            : <CustomButton text="Start a load" active={true} />
+         }
+        </View>
       </View>
-      <View style={styles.lower}>
-	     <View style={styles.machineSelect}>
-        <CustomButton text="Washer" active={true} />
-        <CustomButton text="Dryer" active={false} />
-	     </View>
-	     <View style={styles.machineNumInputContainer}>
-	      <Text style={styles.textMain}>Machine number: </Text>
-        <TextInput style={styles.machineNumInput}></TextInput>
-	     </View>
-       {
-         loadData.isRunning ?
-          <CustomButton text="Stop load" active={true} />
-          : <CustomButton text="Start a load" active={true} />
-       }
-      </View>
-    </View>
-  );
+    )
+  }
 }
+
+export default App;
