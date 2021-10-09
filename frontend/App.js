@@ -24,6 +24,7 @@ class App extends Component {
       isWasher: true,
       drosherId: null,
       isRunning: false,
+      endTime: null,
     };
   }
 
@@ -44,7 +45,7 @@ class App extends Component {
         laundromat_id: this.state.laundromat.id
       }).then((result) => {
         if (result.data.status == 1) {
-          this.setState({isRunning: true, drosherId: result.data.drosher_id})
+          this.setState({isRunning: true, drosherId: result.data.drosher_id, endTime: result.data.end_time})
         }
       });
     }
@@ -89,6 +90,10 @@ class App extends Component {
 
   render() {
     let da = this.state.drosherAvailability;
+    const getEndTime = () => {
+      var date = new Date(this.state.endTime*1000);
+      return date.toString();
+    }
     return(
       <View style={styles.body}>
         <Text style={styles.logoText}>Londree</Text>
@@ -98,6 +103,11 @@ class App extends Component {
   	     <Text style={styles.textMain}>Dryers available: {da.availableDryers}/{da.totalDryers}</Text>
         </View>
         <View style={styles.lower}>
+         <Text style={styles.textMain}>{
+           this.state.isRunning ?
+            `Load finishes at ${getEndTime()}`
+            : ''
+         }</Text>
   	     <View style={styles.machineSelect}>
           <CustomButton text="Washer" active={true} />
           <CustomButton text="Dryer" active={false} />

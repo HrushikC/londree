@@ -21,7 +21,8 @@ const mainStyle = StyleSheet.create({
 	},
 	lower: {
 		alignItems: "center",
-		top: "65vh",
+		bottom: "5vh",
+		position: "absolute",
 	},
 	machineSelect: {
 		flex: 1,
