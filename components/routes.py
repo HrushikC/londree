@@ -22,32 +22,32 @@ def laundromat(laundromat_id):
 
 @app.route("/startLoad", methods=['POST'])
 def startLoad():
+    """
+    Body:
+        isWash: boolean
+        laundromat_id: integer
+        drosher_local_id: integer
+    """
     data = request.get_json(silent=True)
-    print(data)
-    type = data.get('type')
+    is_wash = data.get('isWash')
     laundromat_id = data.get('laundromat_id')
     drosher_local_id = data.get('drosher_local_id')
+    # should have a check here that makes sure that all fields are filled correctly
+        # check all vars, not just local_id
+    if not drosher_local_id or drosher_local_id < 0:
+        return jsonify({"message": "Load unable to start. drosher_local_id not sent or formatted incorrectly"})
 
-    if data.get('type') == 'wash':
-        is_washer = True
+    if is_wash:
         runtime = 60*30
     else:
-        is_washer = False
         runtime = 60*60
-    if drosher_local_id and drosher_local_id >= 0:
-        drosher = Drosher.query.filter_by(laundromat_id=laundromat_id, is_washer=is_washer, end_time=0, local_id=drosher_local_id).first()
-        if not drosher:
-            return jsonify({"message": "Load unable to start. Maybe the local_id is incorrect or the washer is still running?"})
-        drosher.explicitly_filled = True
-    else:
-        drosher = Drosher.query.filter_by(laundromat_id=laundromat_id, is_washer=is_washer, end_time=0).first()
-        if not drosher:
-            return jsonify({"message": "Load not started, no available machines found"})
-        drosher.explicitly_filled = False
-    drosher.end_time = datetime.now().strftime('%s') + str(runtime)
+    drosher = Drosher.query.filter_by(laundromat_id=laundromat_id, is_washer=is_wash, end_time=0, local_id=drosher_local_id).first()
+    if not drosher:
+        return jsonify({"status": 0, "message": "Load unable to start. Maybe the local_id is incorrect or the washer is still running?"})
+    drosher.end_time = int(datetime.now().strftime('%s')) + runtime
     db.session.add(drosher)
     db.session.commit()
-    return jsonify({"message": "Load started successfully", "drosher_id": drosher.id})
+    return jsonify({"status": 1, "message": "Load started successfully", "drosher_id": drosher.id, "end_time": drosher.end_time})
 
 
 @app.route("/emptyLoad", methods=['POST'])
@@ -71,3 +71,14 @@ def emptyLoad():
     db.session.add(drosher)
     db.session.commit()
     return jsonify({"message": "Load emptied successfully"})
+
+# ADMIN ROUTES
+def addLaundromat(lm_name):
+    new_lm = Laundromat(name=lm_name)
+    db.session.add(new_lm)
+    db.session.commit()
+
+def addDrosher(lm_id, local_id, is_washer):
+    new_drosh = Drosher(is_washer=is_washer, end_time=0, laundromat_id=lm_id, local_id=local_id, explicitly_filled=True)
+    db.session.add(new_drosh)
+    db.session.commit()

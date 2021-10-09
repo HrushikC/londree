@@ -21,22 +21,21 @@ const mainStyle = StyleSheet.create({
 	},
 	lower: {
 		alignItems: "center",
-		top: "65vh",
+		bottom: "5vh",
+		position: "absolute",
 	},
 	machineSelect: {
 		flex: 1,
 		flexDirection: 'row',
 	},
-	machineSelectButton: {
-		width: "90px",
-		paddingVertical: "10px",
-		margin: "10px",
-		textAlign: "center",
-		backgroundColor: "#339AE4",
-		color: "white",
-		//borderWidth: "1px",
-		//borderColor: "white",
-		//borderRadius: "5px",
+	machineNumInputContainer: {
+		flex: 1,
+		flexDirection: 'row'
+	},
+	machineNumInput: {
+		backgroundColor: 'white',
+		width: '30px',
+		paddingHorizontal: '5px'
 	}
 });
 
