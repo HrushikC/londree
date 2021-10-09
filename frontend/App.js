@@ -20,12 +20,10 @@ class App extends Component {
         availableDryers: '-',
         totalDryers: '-'
       },
-      loadData: {
-        isWasher: true,
-        machineNumber: 1,
-        drosherId: null,
-        isRunning: false
-      }
+      machineNumber: 1,
+      isWasher: true,
+      drosherId: null,
+      isRunning: false,
     };
   }
 
@@ -35,17 +33,15 @@ class App extends Component {
 
   startLoad = () => {
     //check that load isn't running
-    let loadData = this.state.loadData;
-    if (!loadData.isRunning) {
+    if (!this.state.isRunning) {
       axios.post(`http://localhost:5000/startLoad`, {
-        isWash: loadData.isWasher,
-        drosher_local_id: loadData.machineNumber,
+        isWash: this.state.isWasher,
+        drosher_local_id: this.state.machineNumber,
         laundromat_id: this.state.laundromat.id
       }).then((result) => {
+        console.log(result);
         if (result.data.status == 1) {
-          let newLoadData = this.state.loadData;
-          newLoadData.isRunning = true;
-          this.setState({loadData: newLoadData})
+          this.setState({isRunning: true, drosherId: result.data.drosher_id})
         }
       });
     }
@@ -53,12 +49,11 @@ class App extends Component {
 
   stopLoad = () => {
     //check that load is running
-    let loadData = this.state.loadData;
-    if (loadData.isRunning) {
+    if (this.state.isRunning) {
       axios.post(`http://localhost:5000/emptyLoad`, {
-        drosher_id: loadData.drosherId
+        drosher_id: this.state.drosherId
       }).then((result) => {
-
+        this.setState({isRunning: false})
       });
     }
   }
@@ -109,7 +104,7 @@ class App extends Component {
           <TextInput style={styles.machineNumInput}></TextInput>
   	     </View>
          {
-           this.state.loadData.isRunning ?
+           this.state.isRunning ?
             <CustomButton text="Stop load" active={true} clickAction={this.stopLoad}/>
             : <CustomButton text="Start a load" active={true} clickAction={this.startLoad} />
          }
