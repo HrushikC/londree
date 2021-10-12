@@ -44,7 +44,7 @@ def startLoad():
     drosher = Drosher.query.filter_by(laundromat_id=laundromat_id, is_washer=is_wash, end_time=0, local_id=drosher_local_id).first()
     if not drosher:
         return jsonify({"status": 0, "message": "Load unable to start. Maybe the local_id is incorrect or the washer is still running?"})
-    drosher.end_time = int(datetime.now().strftime('%s')) + runtime
+    drosher.end_time = int(datetime.now().strftime('%S')) + runtime
     db.session.add(drosher)
     db.session.commit()
     return jsonify({"status": 1, "message": "Load started successfully", "drosher_id": drosher.id, "end_time": drosher.end_time})
