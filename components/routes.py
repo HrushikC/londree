@@ -7,9 +7,12 @@ from flask_login import login_user, current_user, logout_user, login_required
 from datetime import datetime
 
 
-@app.route("/")
-def menu():
-    return jsonify()
+@app.route("/laundromats", methods=['GET'])
+def get_laundromats():
+    laundromats = Laundromat.query.all()
+    laundromats_schema = LaundromatSchema(many=True)
+    laundromats_data = laundromats_schema.dump(laundromats)
+    return jsonify(laundromats=laundromats_data)
 
 
 @app.route("/laundromat/<int:laundromat_id>", methods=['GET'])

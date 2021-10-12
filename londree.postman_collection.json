@@ -77,6 +77,24 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "Get Laundromats",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:5000/laundromats",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"laundromats"
+					]
+				}
+			},
+			"response": []
 		}
 	]
 }
