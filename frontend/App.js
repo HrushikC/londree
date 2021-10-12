@@ -28,16 +28,10 @@ class App extends Component {
     };
   }
 
-  setMachineNumber = (text) => {
-    this.setState({machineNumber:Number(text)});
-  }
+  setMachineNumber = (text) => { this.setState({machineNumber:Number(text)}) }
 
-  setAsWasher = () => {
-    this.setState({isWasher: true})
-  }
-  setAsDryer = () => {
-    this.setState({isWasher: false})
-  }
+  setAsWasher = () => { this.setState({isWasher: true}) }
+  setAsDryer = () => { this.setState({isWasher: false}) }
 
   componentDidMount() {
     this.updateDroshers();

@@ -1,0 +1,10 @@
+backend() {
+	source venv/bin/activate
+	python3 run.py
+}
+frontend() {
+	cd frontend
+	yarn web
+}
+backend & frontend
+
