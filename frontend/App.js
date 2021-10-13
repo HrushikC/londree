@@ -3,7 +3,7 @@ import React, { useEffect, useState, Component } from 'react';
 import { TouchableOpacity, View, Text, TextInput } from 'react-native';
 import styles from './styles.js';
 import axios from 'axios';
-import { CustomButton, DrosherGrid } from './components/index';
+import { CustomButton, DrosherGrid, LoadTimer } from './components/index';
 
 class App extends Component {
   constructor(props) {
@@ -118,7 +118,7 @@ class App extends Component {
         <View style={styles.lower}>
          <Text style={styles.textMain}>{
            this.state.isRunning ?
-            `Load finishes at ${getEndTime()}`
+            <LoadTimer endTime={this.state.endTime}/>
             : ''
          }</Text>
          {
