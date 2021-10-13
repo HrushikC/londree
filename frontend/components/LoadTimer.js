@@ -25,7 +25,7 @@ class LoadTimer extends Component {
       console.log(seconds);
       this.setState({ timeLeft: `${minutes}:${seconds}` })
       if (distance < 0) {
-        clearInterval(x);
+        clearInterval(this.timerProcess);
       }
     }, 1000);
   }
