@@ -14,7 +14,7 @@ const DrosherGrid = ({ droshers, setActiveDrosher }) => (
           return styles.waiting;
       }
       return (
-        <TouchableOpacity onPress={() => {setActiveDrosher(drosher.id)}} style={[styles.block, bgColor()]}>
+        <TouchableOpacity onPress={() => {setActiveDrosher(drosher)}} style={[styles.block, bgColor()]}>
           <Text style={styles.text}>{drosher.local_id}</Text>
         </TouchableOpacity>
       )

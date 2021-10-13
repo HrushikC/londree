@@ -20,6 +20,7 @@ class App extends Component {
         availableDryers: '-',
         totalDryers: '-'
       },
+      selectedDrosher: {},
       machineNumber: 1,
       isWasher: true,
       drosherId: null,
@@ -32,6 +33,14 @@ class App extends Component {
 
   setAsWasher = () => { this.setState({isWasher: true}) }
   setAsDryer = () => { this.setState({isWasher: false}) }
+
+  setActiveDrosher = (drosher) => {
+    this.setState({
+      selectedDrosher: drosher,
+      isWasher: drosher.is_washer,
+      machineNumber: drosher.local_id
+    });
+  }
 
   componentDidMount() {
     this.updateDroshers();
@@ -104,7 +113,7 @@ class App extends Component {
   	     <Text style={styles.textMain}>Dryers available: {da.availableDryers}/{da.totalDryers}</Text>
         </View>
         <View style={styles.middle}>
-          <DrosherGrid droshers={this.state.droshers}/>
+          <DrosherGrid droshers={this.state.droshers} setActiveDrosher={this.setActiveDrosher}/>
         </View>
         <View style={styles.lower}>
          <Text style={styles.textMain}>{
