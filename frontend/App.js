@@ -3,7 +3,7 @@ import React, { useEffect, useState, Component } from 'react';
 import { TouchableOpacity, View, Text, TextInput } from 'react-native';
 import styles from './styles.js';
 import axios from 'axios';
-import CustomButton from './components/CustomButton';
+import { CustomButton, DrosherGrid } from './components/index';
 
 class App extends Component {
   constructor(props) {
@@ -102,6 +102,9 @@ class App extends Component {
   	     <Text style={styles.textMain}>{this.state.laundromat.name}</Text>
   	     <Text style={styles.textMain}>Washers available: {da.availableWashers}/{da.totalWashers}</Text>
   	     <Text style={styles.textMain}>Dryers available: {da.availableDryers}/{da.totalDryers}</Text>
+        </View>
+        <View style={styles.middle}>
+          <DrosherGrid droshers={this.state.droshers}/>
         </View>
         <View style={styles.lower}>
          <Text style={styles.textMain}>{
