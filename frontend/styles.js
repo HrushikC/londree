@@ -19,6 +19,9 @@ const mainStyle = StyleSheet.create({
 		color: "white",
 		fontSize: "12pt",
 	},
+	middle: {
+		top: "20vh"
+	},
 	lower: {
 		alignItems: "center",
 		bottom: "5vh",

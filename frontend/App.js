@@ -3,7 +3,7 @@ import React, { useEffect, useState, Component } from 'react';
 import { TouchableOpacity, View, Text, TextInput } from 'react-native';
 import styles from './styles.js';
 import axios from 'axios';
-import CustomButton from './components/CustomButton';
+import { CustomButton, DrosherGrid, LoadTimer } from './components/index';
 
 class App extends Component {
   constructor(props) {
@@ -20,6 +20,7 @@ class App extends Component {
         availableDryers: '-',
         totalDryers: '-'
       },
+      selectedDrosher: {},
       machineNumber: 1,
       isWasher: true,
       drosherId: null,
@@ -32,6 +33,14 @@ class App extends Component {
 
   setAsWasher = () => { this.setState({isWasher: true}) }
   setAsDryer = () => { this.setState({isWasher: false}) }
+
+  setActiveDrosher = (drosher) => {
+    this.setState({
+      selectedDrosher: drosher,
+      isWasher: drosher.is_washer,
+      machineNumber: drosher.local_id
+    });
+  }
 
   componentDidMount() {
     this.updateDroshers();
@@ -103,10 +112,13 @@ class App extends Component {
   	     <Text style={styles.textMain}>Washers available: {da.availableWashers}/{da.totalWashers}</Text>
   	     <Text style={styles.textMain}>Dryers available: {da.availableDryers}/{da.totalDryers}</Text>
         </View>
+        <View style={styles.middle}>
+          <DrosherGrid droshers={this.state.droshers} setActiveDrosher={this.setActiveDrosher}/>
+        </View>
         <View style={styles.lower}>
          <Text style={styles.textMain}>{
            this.state.isRunning ?
-            `Load finishes at ${getEndTime()}`
+            <LoadTimer endTime={this.state.endTime}/>
             : ''
          }</Text>
          {

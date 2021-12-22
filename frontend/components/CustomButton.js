@@ -1,6 +1,5 @@
 import React from 'react';
-import { TouchableOpacity, Text } from 'react-native';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, TouchableOpacity, Text } from 'react-native';
 
 const CustomButton = ({ text, active, clickAction }) => (
   <TouchableOpacity onPress={clickAction}>
