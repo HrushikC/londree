@@ -1,6 +1,11 @@
 venv/
-
+pyvenv.cfg/
+start/
 __pycache__/
+
+bin/
+lib/
+include/
 
 *.py[cod]
 
